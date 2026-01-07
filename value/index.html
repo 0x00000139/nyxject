@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>Bio</title>
+    <link rel="icon" type="image/webp" href="../leaf7.webp">
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div id="snowflake-container">
+        <div class="snowflake" style="left: 10%; animation-duration: 10s; animation-delay: 0s;">❅</div>
+        <div class="snowflake" style="left: 20%; animation-duration: 12s; animation-delay: 1s;">❅</div>
+        <div class="snowflake" style="left: 30%; animation-duration: 8s; animation-delay: 2s;">❅</div>
+        <div class="snowflake" style="left: 40%; animation-duration: 15s; animation-delay: 0s;">❅</div>
+        <div class="snowflake" style="left: 50%; animation-duration: 11s; animation-delay: 3s;">❅</div>
+        <div class="snowflake" style="left: 60%; animation-duration: 9s; animation-delay: 1.5s;">❅</div>
+        <div class="snowflake" style="left: 70%; animation-duration: 13s; animation-delay: 0.5s;">❅</div>
+        <div class="snowflake" style="left: 80%; animation-duration: 14s; animation-delay: 2.5s;">❅</div>
+        <div class="snowflake" style="left: 90%; animation-duration: 10s; animation-delay: 1s;">❅</div>
+        <div class="snowflake" style="left: 95%; animation-duration: 12s; animation-delay: 4s;">❅</div>
+    </div>
+
+    <div id="reveal-screen" class="reveal-screen-blur">
+        <div class="reveal-text"><em>Click</em></div>
+    </div>
+
+    <div class="bg-gif"></div>
+
+    <main id="main-content">
+        <div class="box-container">
+            <div class="banner-wrapper">
+                <img src="assets/banner.gif" alt="Banner" class="banner-img" />
+            </div>
+
+            <div class="profile-header">
+                <div class="avatar-wrapper">
+                    <img src="assets/avatar.gif" alt="Avatar" class="avatar" />
+                    <img src="https://r2.fakecrime.bio/assets/decorations/butterflies.gif" alt="Decoration"
+                        class="decoration" />
+                </div>
+                <div class="username-sparkles">Yunus</div>
+            </div>
+
+            <div class="box-content">
+                <div class="about-me-section">
+                    <h1 class="about-title">ABOUT ME</h1>
+                    <div class="hr-theme"></div>
+                    <div class="bio-text">
+                        <em>“Built in the shadows. Moving in silence.”</em>
+                        <quote>I don’t chase trouble it finds me.</quote>
+                        <ul>
+                            <li>No traces</li>
+                            <li>No mistakes</li>
+                            <li>No second chances</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="location">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="13" height="13">
+                        <path
+                            d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z">
+                        </path>
+                    </svg>
+                    <p>unkown/place</p>
+                </div>
+
+                <div class="soundcloud-box">
+                    <div class="sc-left">
+                        <div id="discord-pfp-wrapper" class="sc-pfp-wrapper">
+                            <div id="discord-pfp" class="sc-pfp"></div>
+                            <img id="sc-decoration" class="sc-decoration" src="" alt="" style="display: none;">
+                            <div id="sc-status-dot" class="sc-status-dot offline"></div>
+                        </div>
+                        <div class="sc-info">
+                            <p id="discord-name">Discord User</p>
+                            <span id="discord-status">Offline</span>
+                        </div>
+                    </div>
+                    <div class="nyx-btn">
+                        <i class="fas fa-skull" style="font-size: 0.8rem;"></i> NYX
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const revealScreen = document.getElementById('reveal-screen');
+        const mainContent = document.getElementById('main-content');
+        const DISCORD_ID = '1142535918553673769';
+
+        async function updatePresence() {
+            try {
+                const response = await fetch(`https://api.leaf7.fun/api/presence`);
+                const data = await response.json();
+
+                if (data) {
+                    if (data.avatar) {
+                        document.getElementById('discord-pfp').style.backgroundImage = `url('${data.avatar}')`;
+                    }
+                    if (data.avatar_decoration) {
+                        const deco = document.getElementById('sc-decoration');
+                        deco.src = data.avatar_decoration;
+                        deco.style.display = 'block';
+                    } else {
+                        document.getElementById('sc-decoration').style.display = 'none';
+                    }
+
+                    document.getElementById('discord-name').textContent = data.username;
+
+                    document.getElementById('discord-status').textContent = data.status;
+
+                    const status = data.raw_status || 'offline';
+                    const el = document.getElementById('sc-status-dot');
+                    if (el) {
+                        el.className = `sc-status-dot ${status}`;
+                    }
+                }
+            } catch (err) {
+                console.error("Presence error:", err);
+            }
+        }
+
+        updatePresence();
+        setInterval(updatePresence, 30000);
+
+        revealScreen.addEventListener('click', () => {
+            revealScreen.classList.add('hidden');
+            mainContent.classList.add('visible');
+
+            const audio = new Audio('https://r2.fakecrime.bio/tracks/audios/759e0a84-7320-48a3-8507-6ff66f2f2935.mp3');
+            audio.loop = true;
+            audio.play().catch(err => console.log("Audio play blocked", err));
+        });
+    </script>
+</body>
+
+</html>
