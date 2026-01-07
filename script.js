@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.directionX = (Math.random() * 0.4) - 0.2;
                 this.directionY = (Math.random() * 0.4) - 0.2;
                 this.size = Math.random() * 2 + 1;
-                this.color = '#7b2cbf';
+                this.color = '#10b981';
             }
             draw() {
                 ctx.beginPath();
@@ -122,3 +122,4 @@ document.addEventListener('DOMContentLoaded', () => {
         animate();
     }
 });
+
