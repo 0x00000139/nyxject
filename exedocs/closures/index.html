@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closures - Leaf7 Documentation</title>
+    <link rel="icon" type="image/webp" href="../../leaf7.webp">
+    <link rel="stylesheet" href="../../style.css?v=1.1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        
+        body {
+            display: flex;
+            min-height: 100vh;
+            padding-top: 80px; 
+        }
+
+        .sidebar {
+            width: 280px;
+            background: rgba(5, 5, 5, 0.95);
+            border-right: 1px solid var(--border-color);
+            height: calc(100vh - 80px);
+            position: fixed;
+            left: 0;
+            top: 80px;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+            z-index: 100;
+        }
+
+        .sidebar-group {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            padding-left: 0.8rem;
+        }
+
+        .sidebar-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .sidebar-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: block;
+        }
+
+        .sidebar-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-link.active {
+            color: var(--accent-primary);
+            background: rgba(16, 185, 129, 0.1);
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            margin-right: 240px; 
+            padding: 3rem 4rem;
+            max-width: 1000px;
+        }
+
+        .on-page-nav {
+            width: 240px;
+            position: fixed;
+            right: 0;
+            top: 80px;
+            height: calc(100vh - 80px);
+            padding: 3rem 1.5rem;
+            border-left: 1px solid var(--border-color);
+            overflow-y: auto;
+        }
+
+        .toc-link {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            padding: 0.3rem 0;
+            border-left: 2px solid transparent;
+            padding-left: 1rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .toc-link:hover {
+            color: var(--accent-primary);
+            opacity: 1;
+        }
+
+        
+        pre[class*="language-"] {
+            background: #0d1117 !important; 
+            border: 1px solid #30363d !important;
+            border-radius: 8px;
+            padding: 1.2rem !important;
+            margin: 1.5rem 0 !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        code[class*="language-"],
+        pre[class*="language-"] {
+            font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace !important;
+            font-size: 0.9rem !important;
+            line-height: 1.6 !important;
+            text-shadow: none !important;
+        }
+
+        
+        :not(pre) > code {
+            background-color: rgba(110, 118, 129, 0.4); 
+            color: #e6edf3;
+            padding: 0.2em 0.4em;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+            font-size: 85%;
+        }
+
+        
+        p a {
+            color: #58a6ff; 
+            text-decoration: none;
+        }
+        
+        p a:hover {
+            text-decoration: underline;
+        }
+
+        
+        .signature-code {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: block;
+            font-family: monospace;
+            color: #e6edf3;
+        }
+        
+        
+        .type-annotation {
+            color: #f47067; 
+        }
+        
+        .func-name {
+            color: #d2a8ff; 
+        }
+
+        .param-name {
+            color: #e6edf3; 
+        }
+
+        h2 {
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            border-bottom: none;
+            color: var(--text-primary);
+        }
+
+        p {
+            color: #c9d1d9;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        hr {
+            border-color: #30363d;
+            margin: 3rem 0;
+            opacity: 0.5;
+        }
+
+        
+        @media (max-width: 1200px) {
+            .on-page-nav {
+                display: none;
+            }
+            .main-content {
+                margin-right: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none; 
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <nav class="navbar">
+        <a href="../../" class="logo">Leaf<span>7</span></a>
+        <div class="nav-links">
+            <a href="../../">Home</a>
+            <a href="../../showcase/">Showcase</a>
+            <a href="../../pricing/">Pricing</a>
+            <a href="https://discord.gg/KXBUCh4ba3" target="_blank">Discord</a>
+        </div>
+    </nav>
+
+    <aside class="sidebar">
+        <div class="sidebar-group">
+            <div class="sidebar-title">Environment</div>
+            <div class="sidebar-links">
+                <a href="../actor/" class="sidebar-link">Actor</a>
+                <a href="../cache/" class="sidebar-link">Cache</a>
+                <a href="#" class="sidebar-link active">Closures</a>
+                <a href="../console/" class="sidebar-link">Console</a>
+                <a href="../crypt/" class="sidebar-link">Crypt</a>
+                <a href="../debug/" class="sidebar-link">Debug</a>
+                <a href="../drawing/" class="sidebar-link">Drawing</a>
+                <a href="../filesystem/" class="sidebar-link">File System</a>
+                <a href="../input/" class="sidebar-link">Input</a>
+                <a href="../instance/" class="sidebar-link">Instance</a>
+                <a href="../metatable/" class="sidebar-link">Metatable</a>
+                <a href="../miscellaneous/" class="sidebar-link">Miscellaneous</a>
+                <a href="../scripts/" class="sidebar-link">Scripts</a>
+                <a href="../web sockets/" class="sidebar-link">Web Sockets</a>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <h1>Closures</h1>
+        <p>Documentation for Closures environment functions.</p>
+
+        <div id="checkcaller">
+            <h2>checkcaller</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;boolean&gt;</span> <span class="func-name">checkcaller</span>()
+            </div>
+            <p>Returns whether the function currently running was called by the executor.</p>
+            <p>This is useful for metamethod hooks that behave differently when called by the game.</p>
+        </div>
+        <hr>
+
+        <div id="clonefunction">
+            <h2>clonefunction</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;function&gt;</span> <span class="func-name">clonefunction</span>(<span class="type-annotation">&lt;function&gt;</span> <span class="param-name">func</span>)
+            </div>
+            <p>Generates a new closure based on the bytecode of function <code>func</code>.</p>
+            <pre><code class="language-lua">local function foo()
+    print("Hello, world!")
+end
+
+local bar = clonefunction(foo)
+
+foo() --> Hello, world!
+bar() --> Hello, world!
+print(foo == bar) --> false</code></pre>
+        </div>
+        <hr>
+
+        <div id="getcallingscript">
+            <h2>getcallingscript</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;BaseScript&gt;</span> <span class="func-name">getcallingscript</span>()
+            </div>
+            <p>Returns the script responsible for the currently running function.</p>
+        </div>
+        <hr>
+
+        <div id="hookfunction">
+            <h2>hookfunction</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;function&gt;</span> <span class="func-name">hookfunction</span>(<span class="type-annotation">&lt;function&gt;</span> <span class="param-name">func</span>, <span class="type-annotation">&lt;function&gt;</span> <span class="param-name">hook</span>)
+            </div>
+            <p>Replaces <code>func</code> with <code>hook</code> internally, where <code>hook</code> will be invoked in place of <code>func</code> when called.</p>
+            <p>Returns a new function that can be used to access the original definition of <code>func</code>.</p>
+            <p>If <code>func</code> is a Luau function (<code>islclosure(func) --> true</code>), the upvalue count of <code>hook</code> must be less than or equal to that of <code>func</code>. <a href="http://www.lua.org/manual/5.1/manual.html#2.6" target="_blank">Lua Manual</a></p>
+            <pre><code class="language-lua">local function foo()
+    print("Hello, world!")
+end
+
+local fooRef = hookfunction(foo, function(...)
+    print("Hooked!")
+end)
+
+foo() --> Hooked!
+fooRef() --> Hello, world!</code></pre>
+        </div>
+        <hr>
+
+        <div id="iscclosure">
+            <h2>iscclosure</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;boolean&gt;</span> <span class="func-name">iscclosure</span>(<span class="type-annotation">&lt;function&gt;</span> <span class="param-name">func</span>)
+            </div>
+            <p>Returns whether or not <code>func</code> is a closure whose source is written in C.</p>
+        </div>
+        <hr>
+
+        <div id="islclosure">
+            <h2>islclosure</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;boolean&gt;</span> <span class="func-name">islclosure</span>(<span class="type-annotation">&lt;function&gt;</span> <span class="param-name">func</span>)
+            </div>
+            <p>Returns whether or not <code>func</code> is a closure whose source is written in Luau.</p>
+        </div>
+        <hr>
+
+        <div id="isexecutorclosure">
+            <h2>isexecutorclosure</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;boolean&gt;</span> <span class="func-name">isexecutorclosure</span>(<span class="type-annotation">&lt;function&gt;</span> <span class="param-name">func</span>)
+            </div>
+            <p>Returns whether or not <code>func</code> was created by the executor.</p>
+        </div>
+        <hr>
+
+        <div id="loadstring">
+            <h2>loadstring</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;function?, string?&gt;</span> <span class="func-name">loadstring</span>(<span class="type-annotation">&lt;string&gt;</span> <span class="param-name">source</span>, <span class="type-annotation">&lt;string?&gt;</span> <span class="param-name">chunkname</span>)
+            </div>
+            <p>Generates a chunk from the given source code. The environment of the returned function is the global environment.</p>
+            <p>If there are no compilation errors, the chunk is returned by itself; otherwise, it returns <code>nil</code> plus the error message.</p>
+            <p><code>chunkname</code> is used as the chunk name for error messages and debug information.</p>
+        </div>
+        <hr>
+
+        <div id="newcclosure">
+            <h2>newcclosure</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;function&gt;</span> <span class="func-name">newcclosure</span>(<span class="type-annotation">&lt;function&gt;</span> <span class="param-name">func</span>)
+            </div>
+            <p>Returns a C closure that wraps <code>func</code>. The result is functionally identical to <code>func</code>, but identifies as a C closure.</p>
+            <pre><code class="language-lua">local foo = function() return true end
+local bar = newcclosure(foo)
+
+print(bar()) --> true</code></pre>
+        </div>
+        <hr>
+
+    </main>
+
+    <aside class="on-page-nav">
+        <div class="sidebar-title">On This Page</div>
+        <a href="#checkcaller" class="toc-link">checkcaller</a>
+        <a href="#clonefunction" class="toc-link">clonefunction</a>
+        <a href="#getcallingscript" class="toc-link">getcallingscript</a>
+        <a href="#hookfunction" class="toc-link">hookfunction</a>
+        <a href="#iscclosure" class="toc-link">iscclosure</a>
+        <a href="#islclosure" class="toc-link">islclosure</a>
+        <a href="#isexecutorclosure" class="toc-link">isexecutorclosure</a>
+        <a href="#loadstring" class="toc-link">loadstring</a>
+        <a href="#newcclosure" class="toc-link">newcclosure</a>
+    </aside>
+
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script src="../../script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-lua.min.js"></script>
+    <script>
+        
+        const tocLinks = document.querySelectorAll('.toc-link');
+        const sections = document.querySelectorAll('div[id]');
+        const visibleSections = new Set();
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    visibleSections.add(entry.target.id);
+                } else {
+                    visibleSections.delete(entry.target.id);
+                }
+            });
+
+            
+            let activeId = null;
+            for (const section of sections) {
+                if (visibleSections.has(section.id)) {
+                    activeId = section.id;
+                    break;
+                }
+            }
+
+            if (activeId) {
+                tocLinks.forEach(link => link.classList.remove('active'));
+                const activeLink = document.querySelector(`.toc-link[href="#${activeId}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            }
+        }, { rootMargin: '-100px 0px -70% 0px' });
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scripts - Leaf7 Documentation</title>
+    <link rel="icon" type="image/webp" href="../../leaf7.webp">
+    <link rel="stylesheet" href="../../style.css?v=1.1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: rgba(5, 5, 5, 0.95);
+            border-right: 1px solid var(--border-color);
+            height: calc(100vh - 80px);
+            position: fixed;
+            left: 0;
+            top: 80px;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+            z-index: 100;
+        }
+
+        .sidebar-group {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            padding-left: 0.8rem;
+        }
+
+        .sidebar-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .sidebar-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: block;
+        }
+
+        .sidebar-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-link.active {
+            color: var(--accent-primary);
+            background: rgba(16, 185, 129, 0.1);
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            margin-right: 240px;
+            padding: 3rem 4rem;
+            max-width: 1000px;
+        }
+
+        .on-page-nav {
+            width: 240px;
+            position: fixed;
+            right: 0;
+            top: 80px;
+            height: calc(100vh - 80px);
+            padding: 3rem 1.5rem;
+            border-left: 1px solid var(--border-color);
+            overflow-y: auto;
+        }
+
+        .toc-link {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            padding: 0.3rem 0;
+            border-left: 2px solid transparent;
+            padding-left: 1rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .toc-link:hover,
+        .toc-link.active {
+            color: var(--accent-primary);
+            border-left-color: var(--accent-primary);
+        }
+
+        pre[class*="language-"] {
+            background: #0d1117 !important;
+            border: 1px solid #30363d !important;
+            border-radius: 8px;
+            padding: 1.2rem !important;
+            margin: 1.5rem 0 !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        code[class*="language-"],
+        pre[class*="language-"] {
+            font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace !important;
+            font-size: 0.9rem !important;
+            line-height: 1.6 !important;
+            text-shadow: none !important;
+        }
+
+        :not(pre) > code {
+            background-color: rgba(110, 118, 129, 0.4);
+            color: #e6edf3;
+            padding: 0.2em 0.4em;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+            font-size: 85%;
+        }
+
+        p a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+        
+        p a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                margin-right: 0;
+                padding-right: 2rem;
+            }
+            .on-page-nav {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 2rem;
+            }
+        }
+
+        h1 { font-size: 2.5rem; margin-bottom: 2rem; color: var(--text-primary); }
+        h2 { font-size: 1.8rem; margin: 2.5rem 0 1rem; color: var(--text-primary); padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); }
+        p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 1rem; }
+        
+        .signature-code {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: block;
+            font-family: monospace;
+            color: #e6edf3;
+        }
+
+        .type-annotation {
+            color: #f47067;
+        }
+        
+        .func-name {
+            color: #d2a8ff;
+        }
+
+        .param-name {
+            color: #e6edf3;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid var(--border-color);
+            margin: 2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.05);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        td {
+            color: var(--text-secondary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <nav class="navbar">
+        <a href="../../" class="logo">Leaf<span>7</span></a>
+        <div class="nav-links">
+            <a href="../../">Home</a>
+            <a href="../../showcase/">Showcase</a>
+            <a href="../../pricing/">Pricing</a>
+            <a href="https://discord.gg/KXBUCh4ba3" target="_blank">Discord</a>
+        </div>
+    </nav>
+
+    <aside class="sidebar">
+        <div class="sidebar-group">
+            <div class="sidebar-title">Environment</div>
+            <div class="sidebar-links">
+                <a href="../actor/" class="sidebar-link">Actor</a>
+                <a href="../cache/" class="sidebar-link">Cache</a>
+                <a href="../closures/" class="sidebar-link">Closures</a>
+                <a href="../console/" class="sidebar-link">Console</a>
+                <a href="../crypt/" class="sidebar-link">Crypt</a>
+                <a href="../debug/" class="sidebar-link">Debug</a>
+                <a href="../drawing/" class="sidebar-link">Drawing</a>
+                <a href="../filesystem/" class="sidebar-link">File System</a>
+                <a href="../input/" class="sidebar-link">Input</a>
+                <a href="../instance/" class="sidebar-link">Instance</a>
+                <a href="../metatable/" class="sidebar-link">Metatable</a>
+                <a href="../miscellaneous/" class="sidebar-link">Miscellaneous</a>
+                <a href="#" class="sidebar-link active">Scripts</a>
+                <a href="../web sockets/" class="sidebar-link">Web Sockets</a>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <h1>Scripts</h1>
+
+        <div id="getgc">
+            <h2>getgc</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;table&lt;function | userdata | table&gt;&gt;</span> <span class="func-name">getgc</span>(<span class="type-annotation">&lt;boolean?&gt;</span> <span class="param-name">includetables</span>)
+            </div>
+            <p>Returns a list of objects in the Luau garbage collector.</p>
+            <p>If <code>includeTables</code> is false, tables will not be included in the list.</p>
+        </div>
+        <hr>
+
+        <div id="getgenv">
+            <h2>getgenv</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;table&lt;[string]: any&gt;&gt;</span> <span class="func-name">getgenv</span>()
+            </div>
+            <p>Returns the custom global environment of the executor.</p>
+        </div>
+        <hr>
+
+        <div id="gettenv">
+            <h2>gettenv</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;table&lt;[string]: any&gt;&gt;</span> <span class="func-name">gettenv</span>(<span class="type-annotation">&lt;thread&gt;</span> <span class="param-name">thread</span>)
+            </div>
+            <p>Returns the environment of <code>thread</code>.</p>
+        </div>
+        <hr>
+
+        <div id="getreg">
+            <h2>getreg</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;table&lt;function | thread&gt;&gt;</span> <span class="func-name">getreg</span>()
+            </div>
+            <p>Returns the lua registry.</p>
+        </div>
+        <hr>
+
+        <div id="getloadedmodules">
+            <h2>getloadedmodules</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;table&lt;ModuleScript&gt;&gt;</span> <span class="func-name">getloadedmodules</span>()
+            </div>
+            <p>Returns a list of ModuleScripts that have been loaded.</p>
+        </div>
+        <hr>
+
+        <div id="getrenv">
+            <h2>getrenv</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;table&lt;[string]: any&gt;&gt;</span> <span class="func-name">getrenv</span>()
+            </div>
+            <p>Returns the global environment of the game client. It can be used to access the global functions that LocalScripts and ModuleScripts use.</p>
+        </div>
+        <hr>
+
+        <div id="getrunningscripts">
+            <h2>getrunningscripts</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;table&lt;LocalScript | ModuleScript&gt;&gt;</span> <span class="func-name">getrunningscripts</span>()
+            </div>
+            <p>Returns a list of scripts that are currently running.</p>
+        </div>
+        <hr>
+
+        <div id="getscriptbytecode">
+            <h2>getscriptbytecode</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;string&gt;</span> <span class="func-name">getscriptbytecode</span>(<span class="type-annotation">&lt;LocalScript | ModuleScript&gt;</span> <span class="param-name">script</span>)
+            </div>
+            <p>Returns the raw Luau bytecode of the given script.</p>
+        </div>
+        <hr>
+
+        <div id="getscriptclosure">
+            <h2>getscriptclosure</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;function&gt;</span> <span class="func-name">getscriptclosure</span>(<span class="type-annotation">&lt;LocalScript | ModuleScript&gt;</span> <span class="param-name">script</span>)
+            </div>
+            <p>Generates a new closure using the bytecode of <code>script</code>.</p>
+        </div>
+        <hr>
+
+        <div id="getscripthash">
+            <h2>getscripthash</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;string&gt;</span> <span class="func-name">getscripthash</span>(<span class="type-annotation">&lt;LocalScript | ModuleScript&gt;</span> <span class="param-name">script</span>)
+            </div>
+            <p>Returns a SHA384 hash of the script's bytecode.</p>
+        </div>
+        <hr>
+
+        <div id="getscripts">
+            <h2>getscripts</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;table&lt;LocalScript | ModuleScript&gt;&gt;</span> <span class="func-name">getscripts</span>()
+            </div>
+            <p>Returns a list of every script in the game.</p>
+        </div>
+        <hr>
+
+        <div id="getsenv">
+            <h2>getsenv</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;table&lt;[string]: any&gt;&gt;</span> <span class="func-name">getsenv</span>(<span class="type-annotation">&lt;LocalScript | ModuleScript&gt;</span> <span class="param-name">script</span>)
+            </div>
+            <p>Returns the global environment of the given script. It can be used to access variables and functions that are not defined as local.</p>
+        </div>
+        <hr>
+
+        <div id="getthreadidentity">
+            <h2>getthreadidentity</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;number&gt;</span> <span class="func-name">getthreadidentity</span>()
+            </div>
+            <p>Returns the identity of the current thread.</p>
+        </div>
+        <hr>
+
+        <div id="setthreadidentity">
+            <h2>setthreadidentity</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;nil&gt;</span> <span class="func-name">setthreadidentity</span>(<span class="type-annotation">&lt;number&gt;</span> <span class="param-name">identity</span>)
+            </div>
+            <p>Sets the current thread identity.</p>
+        </div>
+        <hr>
+
+    </main>
+
+    <aside class="on-page-nav">
+        <div class="sidebar-title">On this page</div>
+        <nav id="toc">
+            <a href="#getgc" class="toc-link">getgc</a>
+            <a href="#getgenv" class="toc-link">getgenv</a>
+            <a href="#gettenv" class="toc-link">gettenv</a>
+            <a href="#getreg" class="toc-link">getreg</a>
+            <a href="#getloadedmodules" class="toc-link">getloadedmodules</a>
+            <a href="#getrenv" class="toc-link">getrenv</a>
+            <a href="#getrunningscripts" class="toc-link">getrunningscripts</a>
+            <a href="#getscriptbytecode" class="toc-link">getscriptbytecode</a>
+            <a href="#getscriptclosure" class="toc-link">getscriptclosure</a>
+            <a href="#getscripthash" class="toc-link">getscripthash</a>
+            <a href="#getscripts" class="toc-link">getscripts</a>
+            <a href="#getsenv" class="toc-link">getsenv</a>
+            <a href="#getthreadidentity" class="toc-link">getthreadidentity</a>
+            <a href="#setthreadidentity" class="toc-link">setthreadidentity</a>
+        </nav>
+    </aside>
+
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script src="../../script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-lua.min.js"></script>
+    <script>
+        const tocLinks = document.querySelectorAll('.toc-link');
+        const sections = document.querySelectorAll('div[id]');
+        const visibleSections = new Set();
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    visibleSections.add(entry.target.id);
+                } else {
+                    visibleSections.delete(entry.target.id);
+                }
+            });
+
+            let activeId = null;
+            for (const section of sections) {
+                if (visibleSections.has(section.id)) {
+                    activeId = section.id;
+                    break;
+                }
+            }
+
+            if (activeId) {
+                tocLinks.forEach(link => link.classList.remove('active'));
+                const activeLink = document.querySelector(`.toc-link[href="#${activeId}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            }
+        }, { rootMargin: '-100px 0px -70% 0px' });
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drawing - Leaf7 Documentation</title>
+    <link rel="icon" type="image/webp" href="../../leaf7.webp">
+    <link rel="stylesheet" href="../../style.css?v=1.1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        
+        body {
+            display: flex;
+            min-height: 100vh;
+            padding-top: 80px; 
+        }
+
+        .sidebar {
+            width: 280px;
+            background: rgba(5, 5, 5, 0.95);
+            border-right: 1px solid var(--border-color);
+            height: calc(100vh - 80px);
+            position: fixed;
+            left: 0;
+            top: 80px;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+            z-index: 100;
+        }
+
+        .sidebar-group {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            padding-left: 0.8rem;
+        }
+
+        .sidebar-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .sidebar-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: block;
+        }
+
+        .sidebar-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-link.active {
+            color: var(--accent-primary);
+            background: rgba(16, 185, 129, 0.1);
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            margin-right: 240px; 
+            padding: 3rem 4rem;
+            max-width: 1000px;
+        }
+
+        .on-page-nav {
+            width: 240px;
+            position: fixed;
+            right: 0;
+            top: 80px;
+            height: calc(100vh - 80px);
+            padding: 3rem 1.5rem;
+            border-left: 1px solid var(--border-color);
+            overflow-y: auto;
+        }
+
+        .toc-link {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            padding: 0.3rem 0;
+            border-left: 2px solid transparent;
+            padding-left: 1rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .toc-link:hover {
+            color: var(--accent-primary);
+            opacity: 1;
+        }
+
+        
+        pre[class*="language-"] {
+            background: #0d1117 !important; 
+            border: 1px solid #30363d !important;
+            border-radius: 8px;
+            padding: 1.2rem !important;
+            margin: 1.5rem 0 !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        code[class*="language-"],
+        pre[class*="language-"] {
+            font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace !important;
+            font-size: 0.9rem !important;
+            line-height: 1.6 !important;
+            text-shadow: none !important;
+        }
+
+        
+        :not(pre) > code {
+            background-color: rgba(110, 118, 129, 0.4); 
+            color: #e6edf3;
+            padding: 0.2em 0.4em;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+            font-size: 85%;
+        }
+
+        
+        p a {
+            color: #58a6ff; 
+            text-decoration: none;
+        }
+        
+        p a:hover {
+            text-decoration: underline;
+        }
+
+        
+        .signature-code {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: block;
+            font-family: monospace;
+            color: #e6edf3;
+        }
+        
+        
+        .type-annotation {
+            color: #f47067; 
+        }
+        
+        .func-name {
+            color: #d2a8ff; 
+        }
+
+        .param-name {
+            color: #e6edf3; 
+        }
+
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            color: #c9d1d9;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            border: 1px solid #30363d;
+            text-align: left;
+        }
+
+        th {
+            background-color: #161b22;
+            font-weight: 600;
+            color: #e6edf3;
+        }
+
+        tr:nth-child(even) {
+            background-color: #0d1117;
+        }
+
+        tr:hover {
+            background-color: rgba(110, 118, 129, 0.1);
+        }
+
+        
+        details {
+            margin: 1.5rem 0;
+            background: rgba(13, 17, 23, 0.5);
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 0.5rem;
+        }
+
+        summary {
+            cursor: pointer;
+            padding: 0.5rem;
+            font-weight: 600;
+            color: #e6edf3;
+            outline: none;
+        }
+
+        summary:hover {
+            color: var(--accent-primary);
+        }
+
+        details[open] summary {
+            border-bottom: 1px solid #30363d;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            border-bottom: none;
+            color: var(--text-primary);
+        }
+
+        h3 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        h4 {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+        }
+
+        p {
+            color: #c9d1d9;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        hr {
+            border-color: #30363d;
+            margin: 3rem 0;
+            opacity: 0.5;
+        }
+
+        
+        @media (max-width: 1200px) {
+            .on-page-nav {
+                display: none;
+            }
+            .main-content {
+                margin-right: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none; 
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <nav class="navbar">
+        <a href="../../" class="logo">Leaf<span>7</span></a>
+        <div class="nav-links">
+            <a href="../../">Home</a>
+            <a href="../../showcase/">Showcase</a>
+            <a href="../../pricing/">Pricing</a>
+            <a href="https://discord.gg/KXBUCh4ba3" target="_blank">Discord</a>
+        </div>
+    </nav>
+
+    <aside class="sidebar">
+        <div class="sidebar-group">
+            <div class="sidebar-title">Environment</div>
+            <div class="sidebar-links">
+                <a href="../actor/" class="sidebar-link">Actor</a>
+                <a href="../cache/" class="sidebar-link">Cache</a>
+                <a href="../closures/" class="sidebar-link">Closures</a>
+                <a href="../console/" class="sidebar-link">Console</a>
+                <a href="../crypt/" class="sidebar-link">Crypt</a>
+                <a href="../debug/" class="sidebar-link">Debug</a>
+                <a href="#" class="sidebar-link active">Drawing</a>
+                <a href="../filesystem/" class="sidebar-link">File System</a>
+                <a href="../input/" class="sidebar-link">Input</a>
+                <a href="../instance/" class="sidebar-link">Instance</a>
+                <a href="../metatable/" class="sidebar-link">Metatable</a>
+                <a href="../miscellaneous/" class="sidebar-link">Miscellaneous</a>
+                <a href="../scripts/" class="sidebar-link">Scripts</a>
+                <a href="../web sockets/" class="sidebar-link">Web Sockets</a>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <h1>Drawing</h1>
+        <p>Documentation for Drawing environment functions and objects.</p>
+
+        <div id="Drawing.new">
+            <h2>Drawing.new</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;DrawingObject&gt;</span> <span class="func-name">Drawing.new</span>(<span class="type-annotation">&lt;string&gt;</span> <span class="param-name">type</span>)
+            </div>
+            <p>Create a new drawing object of the specified type.</p>
+
+            <details>
+                <summary>Objects</summary>
+                
+                <h3>DrawingObject</h3>
+                
+                <h4>BaseDrawingObject</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Visible</td><td>boolean</td></tr>
+                        <tr><td>ZIndex</td><td>number</td></tr>
+                        <tr><td>Transparency</td><td>number</td></tr>
+                        <tr><td>Color</td><td>Color3</td></tr>
+                        <tr><td>Destroy</td><td>function</td></tr>
+                    </tbody>
+                </table>
+
+                <h4>Line</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>From</td><td>Vector2</td></tr>
+                        <tr><td>To</td><td>Vector2</td></tr>
+                        <tr><td>Thickness</td><td>number</td></tr>
+                    </tbody>
+                </table>
+
+                <h4>Text</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Text</td><td>string</td></tr>
+                        <tr><td>TextBounds</td><td>Vector2</td></tr>
+                        <tr><td>Font</td><td>number</td></tr>
+                        <tr><td>Size</td><td>number</td></tr>
+                        <tr><td>Position</td><td>Vector2</td></tr>
+                        <tr><td>Center</td><td>boolean</td></tr>
+                        <tr><td>Outline</td><td>boolean</td></tr>
+                        <tr><td>OutlineColor</td><td>Color3</td></tr>
+                    </tbody>
+                </table>
+
+                <h4>Image</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Data</td><td>string</td></tr>
+                        <tr><td>Size</td><td>Vector2</td></tr>
+                        <tr><td>Position</td><td>Vector2</td></tr>
+                        <tr><td>Rounding</td><td>number</td></tr>
+                    </tbody>
+                </table>
+
+                <h4>Circle</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>NumSides</td><td>number</td></tr>
+                        <tr><td>Radius</td><td>number</td></tr>
+                        <tr><td>Position</td><td>Vector2</td></tr>
+                        <tr><td>Thickness</td><td>number</td></tr>
+                        <tr><td>Filled</td><td>boolean</td></tr>
+                    </tbody>
+                </table>
+
+                <h4>Square</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Size</td><td>Vector2</td></tr>
+                        <tr><td>Position</td><td>Vector2</td></tr>
+                        <tr><td>Thickness</td><td>number</td></tr>
+                        <tr><td>Filled</td><td>boolean</td></tr>
+                    </tbody>
+                </table>
+
+                <h4>Quad</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>PointA</td><td>Vector2</td></tr>
+                        <tr><td>PointB</td><td>Vector2</td></tr>
+                        <tr><td>PointC</td><td>Vector2</td></tr>
+                        <tr><td>PointD</td><td>Vector2</td></tr>
+                        <tr><td>Thickness</td><td>number</td></tr>
+                        <tr><td>Filled</td><td>boolean</td></tr>
+                    </tbody>
+                </table>
+
+                <h4>Triangle</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>PointA</td><td>Vector2</td></tr>
+                        <tr><td>PointB</td><td>Vector2</td></tr>
+                        <tr><td>PointC</td><td>Vector2</td></tr>
+                        <tr><td>Thickness</td><td>number</td></tr>
+                        <tr><td>Filled</td><td>boolean</td></tr>
+                    </tbody>
+                </table>
+            </details>
+        </div>
+        <hr>
+
+        <div id="Drawing.Fonts">
+            <h2>Drawing.Fonts</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Index</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>UI</td><td>0</td></tr>
+                    <tr><td>System</td><td>1</td></tr>
+                    <tr><td>Plex</td><td>2</td></tr>
+                    <tr><td>Monospace</td><td>3</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <hr>
+
+        <div id="cleardrawcache">
+            <h2>cleardrawcache</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;nil&gt;</span> <span class="func-name">cleardrawcache</span>()
+            </div>
+            <p>Destroys every drawing object in the cache. Invalidates references to the drawing objects.</p>
+        </div>
+        <hr>
+
+        <div id="getrenderproperty">
+            <h2>getrenderproperty</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;any&gt;</span> <span class="func-name">getrenderproperty</span>(<span class="type-annotation">&lt;DrawingObject&gt;</span> <span class="param-name">drawing</span>, <span class="type-annotation">&lt;string&gt;</span> <span class="param-name">property</span>)
+            </div>
+            <p>Gets the value of a property of a drawing. Functionally identical to <code>drawing[property]</code>.</p>
+        </div>
+        <hr>
+
+        <div id="isrenderobj">
+            <h2>isrenderobj</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;boolean&gt;</span> <span class="func-name">isrenderobj</span>(<span class="type-annotation">&lt;any&gt;</span> <span class="param-name">object</span>)
+            </div>
+            <p>Returns whether the given object is a valid Drawing.</p>
+        </div>
+        <hr>
+
+        <div id="setrenderproperty">
+            <h2>setrenderproperty</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;nil&gt;</span> <span class="func-name">setrenderproperty</span>(<span class="type-annotation">&lt;DrawingObject&gt;</span> <span class="param-name">drawing</span>, <span class="type-annotation">&lt;string&gt;</span> <span class="param-name">property</span>, <span class="type-annotation">&lt;any&gt;</span> <span class="param-name">value</span>)
+            </div>
+            <p>Sets the value of a property of a drawing. Functionally identical to <code>drawing[property] = value</code>.</p>
+        </div>
+        <hr>
+
+    </main>
+
+    <aside class="on-page-nav">
+        <div class="sidebar-title">On This Page</div>
+        <a href="#Drawing.new" class="toc-link">Drawing.new</a>
+        <a href="#Drawing.Fonts" class="toc-link">Drawing.Fonts</a>
+        <a href="#cleardrawcache" class="toc-link">cleardrawcache</a>
+        <a href="#getrenderproperty" class="toc-link">getrenderproperty</a>
+        <a href="#isrenderobj" class="toc-link">isrenderobj</a>
+        <a href="#setrenderproperty" class="toc-link">setrenderproperty</a>
+    </aside>
+
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script src="../../script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-lua.min.js"></script>
+    <script>
+        
+        const tocLinks = document.querySelectorAll('.toc-link');
+        const sections = document.querySelectorAll('div[id]');
+        const visibleSections = new Set();
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    visibleSections.add(entry.target.id);
+                } else {
+                    visibleSections.delete(entry.target.id);
+                }
+            });
+
+            
+            let activeId = null;
+            for (const section of sections) {
+                if (visibleSections.has(section.id)) {
+                    activeId = section.id;
+                    break;
+                }
+            }
+
+            if (activeId) {
+                tocLinks.forEach(link => link.classList.remove('active'));
+                const activeLink = document.querySelector(`.toc-link[href="#${activeId}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            }
+        }, { rootMargin: '-100px 0px -70% 0px' });
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+
+</html>

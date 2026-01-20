@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actor - Leaf7 Documentation</title>
+    <link rel="icon" type="image/webp" href="../../leaf7.webp">
+    <link rel="stylesheet" href="../../style.css?v=1.1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        
+        body {
+            display: flex;
+            min-height: 100vh;
+            padding-top: 80px; 
+        }
+
+        .sidebar {
+            width: 280px;
+            background: rgba(5, 5, 5, 0.95);
+            border-right: 1px solid var(--border-color);
+            height: calc(100vh - 80px);
+            position: fixed;
+            left: 0;
+            top: 80px;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+            z-index: 100;
+        }
+
+        .sidebar-group {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            padding-left: 0.8rem;
+        }
+
+        .sidebar-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .sidebar-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: block;
+        }
+
+        .sidebar-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-link.active {
+            color: var(--accent-primary);
+            background: rgba(16, 185, 129, 0.1);
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            margin-right: 240px; 
+            padding: 3rem 4rem;
+            max-width: 1000px;
+        }
+
+        .on-page-nav {
+            width: 240px;
+            position: fixed;
+            right: 0;
+            top: 80px;
+            height: calc(100vh - 80px);
+            padding: 3rem 1.5rem;
+            border-left: 1px solid var(--border-color);
+            overflow-y: auto;
+        }
+
+        .toc-link {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            padding: 0.3rem 0;
+            border-left: 2px solid transparent;
+            padding-left: 1rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .toc-link:hover {
+            color: var(--accent-primary);
+            opacity: 1;
+        }
+
+        
+        pre[class*="language-"] {
+            background: #0d1117 !important; 
+            border: 1px solid #30363d !important;
+            border-radius: 8px;
+            padding: 1.2rem !important;
+            margin: 1.5rem 0 !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        code[class*="language-"],
+        pre[class*="language-"] {
+            font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace !important;
+            font-size: 0.9rem !important;
+            line-height: 1.6 !important;
+            text-shadow: none !important;
+        }
+
+        
+        :not(pre) > code {
+            background-color: rgba(110, 118, 129, 0.4); 
+            color: #e6edf3;
+            padding: 0.2em 0.4em;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+            font-size: 85%;
+        }
+
+        
+        p a {
+            color: #58a6ff; 
+            text-decoration: none;
+        }
+        
+        p a:hover {
+            text-decoration: underline;
+        }
+
+        
+        .signature-code {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: block;
+            font-family: monospace;
+            color: #e6edf3;
+        }
+        
+        
+        .type-annotation {
+            color: #f47067; 
+        }
+        
+        .func-name {
+            color: #d2a8ff; 
+        }
+
+        .param-name {
+            color: #e6edf3; 
+        }
+
+        h2 {
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            border-bottom: none;
+            color: var(--text-primary);
+        }
+
+        p {
+            color: #c9d1d9;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        hr {
+            border-color: #30363d;
+            margin: 3rem 0;
+            opacity: 0.5;
+        }
+
+        
+        @media (max-width: 1200px) {
+            .on-page-nav {
+                display: none;
+            }
+            .main-content {
+                margin-right: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none; 
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <nav class="navbar">
+        <a href="../../" class="logo">Leaf<span>7</span></a>
+        <div class="nav-links">
+            <a href="../../">Home</a>
+            <a href="../../showcase/">Showcase</a>
+            <a href="../../pricing/">Pricing</a>
+            <a href="https://discord.gg/KXBUCh4ba3" target="_blank">Discord</a>
+        </div>
+    </nav>
+
+    <aside class="sidebar">
+        <div class="sidebar-group">
+            <div class="sidebar-title">Environment</div>
+            <div class="sidebar-links">
+                <a href="#" class="sidebar-link active">Actor</a>
+                <a href="../cache/" class="sidebar-link">Cache</a>
+                <a href="../closures/" class="sidebar-link">Closures</a>
+                <a href="../console/" class="sidebar-link">Console</a>
+                <a href="../crypt/" class="sidebar-link">Crypt</a>
+                <a href="../debug/" class="sidebar-link">Debug</a>
+                <a href="../drawing/" class="sidebar-link">Drawing</a>
+                <a href="../filesystem/" class="sidebar-link">File System</a>
+                <a href="../input/" class="sidebar-link">Input</a>
+                <a href="../instance/" class="sidebar-link">Instance</a>
+                <a href="../metatable/" class="sidebar-link">Metatable</a>
+                <a href="../miscellaneous/" class="sidebar-link">Miscellaneous</a>
+                <a href="../scripts/" class="sidebar-link">Scripts</a>
+                <a href="../web sockets/" class="sidebar-link">Web Sockets</a>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <h1>Actor</h1>
+        <p>Documentation for Actor environment functions.</p>
+
+        <div id="create_comm_channel">
+            <h2>create_comm_channel</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;number, BindableEvent&gt;</span> <span class="func-name">create_comm_channel</span>()
+            </div>
+            <p>Returns the channel and the associated ID.</p>
+        </div>
+        <hr>
+
+        <div id="get_comm_channel">
+            <h2>get_comm_channel</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;BindableEvent&gt;</span> <span class="func-name">get_comm_channel</span>(<span class="type-annotation">&lt;number&gt;</span> <span class="param-name">id</span>)
+            </div>
+            <p>Returns the communication channel if it exists.</p>
+        </div>
+        <hr>
+
+        <div id="run_on_actor">
+            <h2>run_on_actor</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;nil&gt;</span> <span class="func-name">run_on_actor</span>(<span class="type-annotation">&lt;Actor&gt;</span> <span class="param-name">actor</span>, <span class="type-annotation">&lt;string&gt;</span> <span class="param-name">script</span>, ...)
+            </div>
+            <p>Runs a script on an actor thread.</p>
+            <pre><code class="language-lua">run_on_actor(getactors()[1], [[
+    print("Hello, world!")
+]])</code></pre>
+        </div>
+        <hr>
+
+        <div id="getactors">
+            <h2>getactors</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;table&lt;Actor&gt;&gt;</span> <span class="func-name">getactors</span>()
+            </div>
+            <p>Returns a table of all actors that exist within the game.</p>
+        </div>
+        <hr>
+
+        <div id="is_parallel">
+            <h2>is_parallel</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;boolean&gt;</span> <span class="func-name">is_parallel</span>()
+            </div>
+            <p>Returns if the thread is running on an actor.</p>
+        </div>
+        <hr>
+
+        <div id="run_on_thread">
+            <h2>run_on_thread</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;nil&gt;</span> <span class="func-name">run_on_thread</span>(<span class="type-annotation">&lt;thread&gt;</span> <span class="param-name">thread</span>, <span class="type-annotation">&lt;string&gt;</span> <span class="param-name">script</span>, ...)
+            </div>
+            <p>Runs a script on a specified thread, actor threads only.</p>
+            <pre><code class="language-lua">run_on_thread(getactorthreads()[1], [[
+    print("Hello, world!")
+]])</code></pre>
+        </div>
+        <hr>
+
+        <div id="getactorthreads">
+            <h2>getactorthreads</h2>
+            <div class="signature-code">
+                <span class="type-annotation">&lt;table&lt;thread&gt;&gt;</span> <span class="func-name">getactorthreads</span>()
+            </div>
+            <p>Returns all threads that belong to actors in a table.</p>
+        </div>
+        <hr>
+
+    </main>
+
+    <aside class="on-page-nav">
+        <div class="sidebar-title">On This Page</div>
+        <a href="#create_comm_channel" class="toc-link">create_comm_channel</a>
+        <a href="#get_comm_channel" class="toc-link">get_comm_channel</a>
+        <a href="#run_on_actor" class="toc-link">run_on_actor</a>
+        <a href="#getactors" class="toc-link">getactors</a>
+        <a href="#is_parallel" class="toc-link">is_parallel</a>
+        <a href="#run_on_thread" class="toc-link">run_on_thread</a>
+        <a href="#getactorthreads" class="toc-link">getactorthreads</a>
+    </aside>
+
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script src="../../script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-lua.min.js"></script>
+    <script>
+        
+        const tocLinks = document.querySelectorAll('.toc-link');
+        const sections = document.querySelectorAll('div[id]');
+        const visibleSections = new Set();
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    visibleSections.add(entry.target.id);
+                } else {
+                    visibleSections.delete(entry.target.id);
+                }
+            });
+
+            
+            let activeId = null;
+            for (const section of sections) {
+                if (visibleSections.has(section.id)) {
+                    activeId = section.id;
+                    break;
+                }
+            }
+
+            if (activeId) {
+                tocLinks.forEach(link => link.classList.remove('active'));
+                const activeLink = document.querySelector(`.toc-link[href="#${activeId}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            }
+        }, { rootMargin: '-100px 0px -70% 0px' });
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+
+</html>
